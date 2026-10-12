@@ -18,7 +18,10 @@
   <name>loja_roupas</name>
 
   <properties>
-    <java.version>21</java.version>
+    <java.version>26</java.version>
+    <maven.compiler.source>26</maven.compiler.source>
+    <maven.compiler.target>26</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <dependencies>
