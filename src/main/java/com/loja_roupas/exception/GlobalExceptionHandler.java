@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Map<String, String>> integridade(DataIntegrityViolationException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(Map.of("erro", "Violação de integridade: CPF já cadastrado ou usuário inexistente"));
+                .body(Map.of("erro", "Operação não permitida: registro duplicado ou em uso por outros registros"));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
