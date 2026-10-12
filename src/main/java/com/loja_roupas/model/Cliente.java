@@ -12,8 +12,9 @@ public class Cliente {
     @Column(name = "id_cliente")
     private Integer idCliente;
 
-    @Column(name = "id_usuario", unique = true)
-    private Integer idUsuario;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", unique = true)
+    private Usuario usuario;
 
     @Column(name = "nome", nullable = false, length = 60)
     private String nome;
@@ -36,33 +37,28 @@ public class Cliente {
     @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
 
-    public Cliente() {
-    }
 
     public Integer getIdCliente() { return idCliente; }
     public void setIdCliente(Integer idCliente) { this.idCliente = idCliente; }
-
-    public Integer getIdUsuario() { return idUsuario; }
-    public void setIdUsuario(Integer idUsuario) { this.idUsuario = idUsuario; }
-
+    public Usuario getUsuario() { return usuario; }
+    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
-
     public String getCpf() { return cpf; }
     public void setCpf(String cpf) { this.cpf = cpf; }
-
     public String getTelefone() { return telefone; }
     public void setTelefone(String telefone) { this.telefone = telefone; }
-
     public String getEndereco() { return endereco; }
     public void setEndereco(String endereco) { this.endereco = endereco; }
-
     public String getRg() { return rg; }
     public void setRg(String rg) { this.rg = rg; }
-
     public String getMedidas() { return medidas; }
     public void setMedidas(String medidas) { this.medidas = medidas; }
-
     public LocalDate getDataNascimento() { return dataNascimento; }
     public void setDataNascimento(LocalDate dataNascimento) { this.dataNascimento = dataNascimento; }
+    @Column(name = "id_usuario", insertable = false, updatable = false)
+private Integer idUsuario;
+
+public Integer getIdUsuario() { return idUsuario; }
+public void setIdUsuario(Integer idUsuario) { this.idUsuario = idUsuario; }
 }
