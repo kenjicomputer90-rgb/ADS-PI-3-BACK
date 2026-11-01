@@ -1,0 +1,32 @@
+{
+  // Nome que aparece no Codespace
+  "name": "Trajeloc (Java 25 + MySQL)",
+
+  // Usa o docker-compose.yml desta mesma pasta para subir os 2 containers
+  "dockerComposeFile": "docker-compose.yml",
+  // O VS Code "entra" no container "app": é nele que você programa
+  "service": "app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+  // Instala o Java 25 (distribuição Temurin) e o Maven no container app
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "25",
+      "jdkDistro": "tem",
+      "installMaven": true
+    }
+  },
+
+  // Libera a porta 3000 (a do Spring) para você abrir no navegador
+  "forwardPorts": [3000],
+
+  // Extensões que já vêm instaladas
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack", // Java: autocompletar, debug, botão Run
+        "humao.rest-client"         // testar a API com arquivos .http (substitui o Postman)
+      ]
+    }
+  }
+}

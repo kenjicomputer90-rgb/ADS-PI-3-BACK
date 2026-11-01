@@ -1,0 +1,32 @@
+services:
+  # Container onde você programa e roda o Spring
+  app:
+    image: mcr.microsoft.com/devcontainers/base:ubuntu
+    volumes:
+      - ../..:/workspaces:cached   # coloca o código do repositório dentro do container
+    command: sleep infinity        # mantém o container ligado
+    depends_on:
+      - db                         # sobe o banco junto
+    environment:
+      # Essas variáveis SUBSTITUEM o que está no application.properties
+      SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/trajeloc?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"
+      SPRING_DATASOURCE_USERNAME: trajeloc
+      SPRING_DATASOURCE_PASSWORD: trajeloc
+
+  # Container do banco MySQL
+  db:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: trajeloc      # cria o banco "trajeloc"
+      MYSQL_USER: trajeloc
+      MYSQL_PASSWORD: trajeloc
+    volumes:
+      - mysql-data:/var/lib/mysql   # guarda os dados mesmo se o container reiniciar
+      # Na 1ª vez que o banco sobe, ele roda os scripts do grupo, nesta ordem:
+      - ../BANCO/PI_3_BD_Script_MYSQL_trajeloc.sql:/docker-entrypoint-initdb.d/1-estrutura.sql
+      - ../BANCO/PI_3_BD_Registros_MYSQL_trajeloc.sql:/docker-entrypoint-initdb.d/2-dados.sql
+
+volumes:
+  mysql-data:
