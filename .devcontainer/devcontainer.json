@@ -8,13 +8,16 @@
   "service": "app",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 
-  // Instala o Java 25 (distribuição Temurin) e o Maven no container app
   "features": {
+    // Instala o Java 25 (distribuição Temurin) e o Maven no container app
     "ghcr.io/devcontainers/features/java:1": {
       "version": "25",
       "jdkDistro": "tem",
       "installMaven": true
-    }
+    },
+    // NOVO: instala o Git LFS. O Codespaces deixa o git configurado
+    // para usá-lo e, sem ele, o "git push" falha.
+    "ghcr.io/devcontainers/features/git-lfs:1": {}
   },
 
   // Libera a porta 3000 (a do Spring) para você abrir no navegador
