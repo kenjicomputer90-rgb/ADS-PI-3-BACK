@@ -11,6 +11,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/produtos")
@@ -36,15 +37,49 @@ public class ProdutoController {
                                         @RequestParam(required = false) String cor) {
         return service.listar(descricao, tamanho, cor);
     }
+    
+// Acrescentando metodos 
+
+@GetMapping("/tamanho/{tamanho}")
+public List<ProdutoResponse> buscarPorTamanho(
+        @PathVariable String tamanho) {
+    return service.buscarPorTamanho(tamanho);
+}
+
+@GetMapping("/cor/{cor}")
+public List<ProdutoResponse> buscarPorCor(
+        @PathVariable String cor) {
+    return service.buscarPorCor(cor);
+}
+
+@GetMapping("/descricao")
+public List<ProdutoResponse> buscarPorDescricao(
+        @RequestParam String valor) {
+    return service.buscarPorDescricao(valor);
+}
+
+@GetMapping("/preco")
+public List<ProdutoResponse> buscarPorPreco(
+        @RequestParam BigDecimal min,
+        @RequestParam BigDecimal max) {
+    return service.buscarPorPreco(min, max);
+}
+
+@GetMapping("/quantidade")
+public long contarProdutos() {
+    return service.contarProdutos();
+}
+
+// fim dos metodos acrescentados
 
     @GetMapping("/{id}")
     public ProdutoResponse buscarPorId(@PathVariable Integer id) {
         return service.buscarPorId(id);
     }
 
-    @GetMapping("/codigo")
-    public ProdutoResponse buscarPorCodigo(@RequestParam String valor) {
-        return service.buscarPorCodigo(valor);
+    @GetMapping("/codigo/{codigo}/existe")
+    public boolean verificarCodigo(@PathVariable String codigo) {
+        return service.existePorCodigo(codigo);
     }
 
     @PutMapping("/{id}")
