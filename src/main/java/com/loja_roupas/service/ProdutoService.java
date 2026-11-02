@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.math.BigDecimal;
 
 @Service
 public class ProdutoService {
@@ -72,6 +73,44 @@ public class ProdutoService {
     return repository.existsByCodigoUnico(codigo);
 }
 
+@Transactional(readOnly = true)
+public List<ProdutoResponse> buscarPorTamanho(String tamanho) {
+    return repository.findByTamanhoIgnoreCase(tamanho.trim())
+            .stream()
+            .map(ProdutoResponse::de)
+            .toList();
+}
+
+@Transactional(readOnly = true)
+public List<ProdutoResponse> buscarPorCor(String cor) {
+    return repository.findByCorIgnoreCase(cor.trim())
+            .stream()
+            .map(ProdutoResponse::de)
+            .toList();
+}
+
+@Transactional(readOnly = true)
+public List<ProdutoResponse> buscarPorDescricao(String descricao) {
+    return repository.findByDescricaoContainingIgnoreCase(descricao.trim())
+            .stream()
+            .map(ProdutoResponse::de)
+            .toList();
+}
+
+@Transactional(readOnly = true)
+public List<ProdutoResponse> buscarPorPreco(
+        BigDecimal minimo, BigDecimal maximo) {
+
+    return repository.findByPrecoBetween(minimo, maximo)
+            .stream()
+            .map(ProdutoResponse::de)
+            .toList();
+}
+
+@Transactional(readOnly = true)
+public long contarProdutos() {
+    return repository.count();
+}
     // ---------- auxiliares ----------
 
     private Produto obter(Integer id) {
