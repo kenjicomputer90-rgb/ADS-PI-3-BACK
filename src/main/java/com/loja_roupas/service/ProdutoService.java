@@ -67,6 +67,11 @@ public class ProdutoService {
         repository.delete(obter(id));
     }
 
+    @Transactional(readOnly = true)
+    public boolean existePorCodigo(String codigo) {
+    return repository.existsByCodigoUnico(codigo);
+}
+
     // ---------- auxiliares ----------
 
     private Produto obter(Integer id) {

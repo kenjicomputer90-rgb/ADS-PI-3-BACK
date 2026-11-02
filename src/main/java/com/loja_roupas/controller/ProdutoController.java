@@ -42,9 +42,9 @@ public class ProdutoController {
         return service.buscarPorId(id);
     }
 
-    @GetMapping("/codigo")
-    public ProdutoResponse buscarPorCodigo(@RequestParam String valor) {
-        return service.buscarPorCodigo(valor);
+    @GetMapping("/codigo/{codigo}/existe")
+    public boolean verificarCodigo(@PathVariable String codigo) {
+        return service.existePorCodigo(codigo);
     }
 
     @PutMapping("/{id}")
