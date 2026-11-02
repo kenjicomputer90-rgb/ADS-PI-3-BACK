@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
+import java.math.BigDecimal;
 
 public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
 
@@ -26,3 +27,20 @@ public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
                           @Param("tamanho") String tamanho,
                           @Param("cor") String cor);
 }
+// Buscar produtos por tamanho
+List<Produto> findByTamanhoIgnoreCase(String tamanho);
+
+// Buscar produtos por cor
+List<Produto> findByCorIgnoreCase(String cor);
+
+// Buscar produtos por descrição
+List<Produto> findByDescricaoContainingIgnoreCase(String descricao);
+
+// Contar produtos cadastrados
+long count();
+
+// Buscar produtos por faixa de preço
+List<Produto> findByPrecoBetween(
+    BigDecimal minimo,
+    BigDecimal maximo
+);
