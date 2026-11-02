@@ -1,0 +1,29 @@
+info:
+  name: Atualizar Cliente (ID)
+  type: http
+  seq: 1
+
+http:
+  method: PUT
+  url: http://localhost:8080/clientes/2
+  body:
+    type: json
+    data: |-
+      {
+        "idCliente": 2,
+        "nome": "Fernanda Costa",
+        "cpf": "222.333.444-55",
+        "telefone": "(19) 97654-3210",
+        "endereco": "Av. Presidente Vargas, 456 - Indaiatuba",
+        "rg": "23.456.789-0",
+        "medidas": "Busto: 85, Cintura: 70, Quadril: 95",
+        "dataNascimento": "1995-08-20",
+        "idUsuario": 6
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
