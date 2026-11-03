@@ -1,11 +1,14 @@
 info:
-  name: Cadastrar Cliente
+  name: Buscar Locacao por ID
   type: http
   seq: 1
 
 http:
-  method: POST
-  url: http://localhost:8080/clientes
+  method: GET
+  url: http://localhost:8080/locacoes/7
+  body:
+    type: json
+    data: ""
   auth: inherit
 
 settings:
@@ -13,4 +16,3 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
-  forwardAuthorizationHeader: false

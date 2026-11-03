@@ -68,6 +68,7 @@ public class LocacaoService {
 
             ItemLocacao item = new ItemLocacao();
             item.setPeca(peca);
+            item.setPrecoAluguel(peca.getPreco()); // acrescentada para LocacaoService
             locacao.adicionarItem(item);
         }
 
