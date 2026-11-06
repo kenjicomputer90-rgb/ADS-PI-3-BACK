@@ -11,7 +11,7 @@ public record ProdutoResponse(
         String tamanho,
         String cor,
         String material,
-        BigDecimal preco,
+        BigDecimal preco
 ) {
     public static ProdutoResponse de(Produto p) {
         return new ProdutoResponse(
