@@ -15,10 +15,17 @@
       "jdkDistro": "tem",
       "installMaven": true
     },
-    // NOVO: instala o Git LFS. O Codespaces deixa o git configurado
+    // Instala o Git LFS. O Codespaces deixa o git configurado
     // para usá-lo e, sem ele, o "git push" falha.
-    "ghcr.io/devcontainers/features/git-lfs:1": {}
+    "ghcr.io/devcontainers/features/git-lfs:1": {},
+    // NOVO: instala o Node.js (versão LTS), que o Bruno CLI precisa
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts"
+    }
   },
+
+  // NOVO: depois de montar o container, instala o Bruno CLI (comando "bru")
+  "postCreateCommand": "npm install -g @usebruno/cli",
 
   // Libera a porta 3000 (a do Spring) para você abrir no navegador
   "forwardPorts": [3000],
