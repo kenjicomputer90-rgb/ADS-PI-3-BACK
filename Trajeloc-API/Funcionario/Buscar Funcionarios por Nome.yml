@@ -1,0 +1,36 @@
+info:
+  name: Buscar Funcionarios por Nome
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: "{{baseUrl}}/funcionarios?nome=na"
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+  scripts:
+    - type: tests
+      code: |-
+        test("todos os nomes contêm 'na'", function () {
+          expect(res.body.length).to.be.greaterThan(0);
+          res.body.forEach(function (f) {
+            expect(f.nome.toLowerCase()).to.include("na");
+          });
+        });
+
+        test("vem em ordem alfabética", function () {
+          const nomes = res.body.map(function (f) { return f.nome; });
+          const ordenados = nomes.slice().sort(function (a, b) { return a.localeCompare(b); });
+          expect(nomes).to.eql(ordenados);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

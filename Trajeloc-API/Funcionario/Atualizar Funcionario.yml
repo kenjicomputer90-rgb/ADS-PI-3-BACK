@@ -1,0 +1,42 @@
+info:
+  name: Atualizar Funcionario
+  type: http
+  seq: 10
+
+http:
+  method: PUT
+  url: "{{baseUrl}}/funcionarios/{{idFuncionarioTeste}}"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "idUsuario": {{idUsuarioTeste}},
+        "nome": "Funcionario Teste Bruno",
+        "cpf": "{{cpfTeste}}",
+        "telefone": "(19) 98888-7777",
+        "salario": 2500.00,
+        "dataNascimento": "2000-01-15"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("mantém o próprio CPF sem acusar conflito e grava os dados novos", function () {
+          expect(res.body.telefone).to.equal("(19) 98888-7777");
+          expect(res.body.salario).to.equal(2500);
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -26,21 +26,22 @@ public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
     List<Produto> filtrar(@Param("descricao") String descricao,
                           @Param("tamanho") String tamanho,
                           @Param("cor") String cor);
+
+    // Buscar produtos por tamanho
+    List<Produto> findByTamanhoIgnoreCase(String tamanho);
+
+    // Buscar produtos por cor
+    List<Produto> findByCorIgnoreCase(String cor);
+
+    // Buscar produtos por descrição
+    List<Produto> findByDescricaoContainingIgnoreCase(String descricao);
+
+    // Contar produtos cadastrados
+    long count();
+
+    // Buscar produtos por faixa de preço
+    List<Produto> findByPrecoBetween(
+        BigDecimal minimo,
+        BigDecimal maximo
+    );
 }
-// Buscar produtos por tamanho
-List<Produto> findByTamanhoIgnoreCase(String tamanho);
-
-// Buscar produtos por cor
-List<Produto> findByCorIgnoreCase(String cor);
-
-// Buscar produtos por descrição
-List<Produto> findByDescricaoContainingIgnoreCase(String descricao);
-
-// Contar produtos cadastrados
-long count();
-
-// Buscar produtos por faixa de preço
-List<Produto> findByPrecoBetween(
-    BigDecimal minimo,
-    BigDecimal maximo
-);
