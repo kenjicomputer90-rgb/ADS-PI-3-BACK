@@ -1,0 +1,38 @@
+info:
+  name: Cadastrar com Usuario ja Vinculado
+  type: http
+  seq: 9
+
+http:
+  method: POST
+  url: "{{baseUrl}}/funcionarios"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "idUsuario": 2,
+        "nome": "Tentativa com o usuario da Mariana",
+        "cpf": "999.000.000-01"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("explica que o usuário já pertence a outro funcionário", function () {
+          expect(res.body.erro).to.include("vinculado");
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "409"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,50 @@
+info:
+  name: Cadastrar Funcionario
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: "{{baseUrl}}/funcionarios"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "idUsuario": {{idUsuarioTeste}},
+        "nome": "Funcionario Teste Bruno",
+        "cpf": "{{cpfTeste}}",
+        "telefone": "(19) 90000-0000",
+        "salario": 2000.00,
+        "dataNascimento": "2000-01-15"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        // Guarda o id do funcionário criado para atualizar e excluir depois
+        bru.setVar("idFuncionarioTeste", res.body.idFuncionario);
+    - type: tests
+      code: |-
+        test("devolve o funcionário com o id gerado pelo banco", function () {
+          expect(res.body.idFuncionario).to.be.a("number");
+          expect(res.body.nome).to.equal("Funcionario Teste Bruno");
+        });
+
+        test("dependente vazio vira 0 (regra do service)", function () {
+          expect(res.body.dependente).to.equal(0);
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "201"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,38 @@
+info:
+  name: Cadastrar Invalido
+  type: http
+  seq: 8
+
+http:
+  method: POST
+  url: "{{baseUrl}}/funcionarios"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "nome": ""
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("aponta os campos obrigatórios que faltaram", function () {
+          expect(res.body).to.have.property("idUsuario");
+          expect(res.body).to.have.property("nome");
+          expect(res.body).to.have.property("cpf");
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "400"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

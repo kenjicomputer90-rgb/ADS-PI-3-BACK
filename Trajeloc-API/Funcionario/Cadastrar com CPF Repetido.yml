@@ -1,0 +1,38 @@
+info:
+  name: Cadastrar com CPF Repetido
+  type: http
+  seq: 7
+
+http:
+  method: POST
+  url: "{{baseUrl}}/funcionarios"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "idUsuario": {{idUsuarioTeste}},
+        "nome": "Outro Funcionario",
+        "cpf": "{{cpfTeste}}"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("explica que o CPF já existe", function () {
+          expect(res.body.erro).to.include("CPF");
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "409"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,45 @@
+info:
+  name: Criar Usuario de Teste
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{baseUrl}}/usuarios"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "nome": "Usuario Teste Bruno",
+        "email": "{{emailTeste}}",
+        "senha": "teste123",
+        "perfilAcesso": "FUNCIONARIO"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        // O banco não aceita email nem CPF repetidos.
+        // Por isso geramos valores novos a cada execução, usando o relógio.
+        const sufixo = String(Date.now()).slice(-8);
+        bru.setVar("emailTeste", "teste" + sufixo + "@trajeloc.com");
+        bru.setVar("cpfTeste", "000." + sufixo.slice(0, 3) + "." + sufixo.slice(3, 6) + "-" + sufixo.slice(6, 8));
+    - type: after-response
+      code: |-
+        // Guarda o id do usuário criado para as próximas requisições
+        bru.setVar("idUsuarioTeste", res.body.idUsuario);
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "201"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
