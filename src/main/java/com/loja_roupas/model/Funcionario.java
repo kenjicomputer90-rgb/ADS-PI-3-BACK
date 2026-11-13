@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * Entidade que representa a tabela funcionario do banco trajeloc.
+ * Os tamanhos das colunas (length) seguem o script BANCO/PI_3_BD_Script_MYSQL_trajeloc.sql.
+ */
 @Entity
 @Table(name = "funcionario")
 public class Funcionario {
@@ -17,16 +21,16 @@ public class Funcionario {
     @JoinColumn(name = "id_usuario", nullable = false, unique = true)
     private Usuario usuario;
 
-    @Column(name = "nome", nullable = false, length = 60)
+    @Column(name = "nome", nullable = false, length = 100)
     private String nome;
 
     @Column(name = "cpf", nullable = false, unique = true, length = 14)
     private String cpf;
 
-    @Column(name = "rg", length = 15)
+    @Column(name = "rg", length = 20)
     private String rg;
 
-    @Column(name = "telefone", length = 15)
+    @Column(name = "telefone", length = 20)
     private String telefone;
 
     @Column(name = "ctps", length = 20)
@@ -35,7 +39,7 @@ public class Funcionario {
     @Column(name = "dependente")
     private Integer dependente = 0;
 
-    @Column(name = "sexo", length = 1)
+    @Column(name = "sexo", length = 20)
     private String sexo;
 
     @Column(name = "salario", precision = 10, scale = 2)
@@ -44,8 +48,12 @@ public class Funcionario {
     @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
 
-    @Column(name = "estado_civil", length = 20)
+    @Column(name = "estado_civil", length = 30)
     private String estadoCivil;
+
+    // true = trabalhando na loja; false = desativado (saiu, mas continua no histórico)
+    @Column(name = "ativo", columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private Boolean ativo = true;
 
     public Integer getIdFuncionario() { return idFuncionario; }
     public void setIdFuncionario(Integer idFuncionario) { this.idFuncionario = idFuncionario; }
@@ -71,4 +79,6 @@ public class Funcionario {
     public void setDataNascimento(LocalDate dataNascimento) { this.dataNascimento = dataNascimento; }
     public String getEstadoCivil() { return estadoCivil; }
     public void setEstadoCivil(String estadoCivil) { this.estadoCivil = estadoCivil; }
+    public Boolean getAtivo() { return ativo; }
+    public void setAtivo(Boolean ativo) { this.ativo = ativo; }
 }

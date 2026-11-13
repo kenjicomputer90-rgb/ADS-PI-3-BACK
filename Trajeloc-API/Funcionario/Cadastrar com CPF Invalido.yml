@@ -1,0 +1,38 @@
+info:
+  name: Cadastrar com CPF Invalido
+  type: http
+  seq: 17
+
+http:
+  method: POST
+  url: "{{baseUrl}}/funcionarios"
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "idUsuario": 1,
+        "nome": "Teste CPF sem pontuacao",
+        "cpf": "44455566677"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("explica o formato certo do CPF", function () {
+          expect(res.body.cpf).to.include("000.000.000-00");
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "400"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

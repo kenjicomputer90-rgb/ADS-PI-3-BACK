@@ -1,7 +1,7 @@
 info:
   name: Buscar Funcionario Excluido
   type: http
-  seq: 12
+  seq: 15
 
 http:
   method: GET
