@@ -1,0 +1,27 @@
+info:
+  name: Ativar Funcionario
+  type: http
+  seq: 13
+
+http:
+  method: PATCH
+  url: "{{baseUrl}}/funcionarios/{{idFuncionarioTeste}}/ativar"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("o funcionário volta a ficar ativo", function () {
+          expect(res.body.ativo).to.equal(true);
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
