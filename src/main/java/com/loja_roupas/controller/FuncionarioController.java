@@ -24,10 +24,11 @@ public class FuncionarioController {
         this.service = service;
     }
 
-    /** GET /funcionarios ou /funcionarios?nome=... */
+    /** GET /funcionarios, com filtros opcionais: ?nome=... e ?ativo=true|false */
     @GetMapping
-    public List<FuncionarioResponse> listar(@RequestParam(required = false) String nome) {
-        return service.listar(nome);
+    public List<FuncionarioResponse> listar(@RequestParam(required = false) String nome,
+                                            @RequestParam(required = false) Boolean ativo) {
+        return service.listar(nome, ativo);
     }
 
     /** GET /funcionarios/{id} */
@@ -54,6 +55,18 @@ public class FuncionarioController {
     public FuncionarioResponse atualizar(@PathVariable Integer id,
                                          @Valid @RequestBody FuncionarioRequest req) {
         return service.atualizar(id, req);
+    }
+
+    /** PATCH /funcionarios/{id}/desativar: marca como inativo (saiu da loja, mas fica no histórico). */
+    @PatchMapping("/{id}/desativar")
+    public FuncionarioResponse desativar(@PathVariable Integer id) {
+        return service.desativar(id);
+    }
+
+    /** PATCH /funcionarios/{id}/ativar: marca como ativo de novo. */
+    @PatchMapping("/{id}/ativar")
+    public FuncionarioResponse ativar(@PathVariable Integer id) {
+        return service.ativar(id);
     }
 
     /** DELETE /funcionarios/{id}: exclui e devolve 204 (No Content). */
