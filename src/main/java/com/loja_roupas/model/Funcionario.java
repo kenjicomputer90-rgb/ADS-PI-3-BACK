@@ -51,6 +51,10 @@ public class Funcionario {
     @Column(name = "estado_civil", length = 30)
     private String estadoCivil;
 
+    // true = trabalhando na loja; false = desativado (saiu, mas continua no histórico)
+    @Column(name = "ativo", columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private Boolean ativo = true;
+
     public Integer getIdFuncionario() { return idFuncionario; }
     public void setIdFuncionario(Integer idFuncionario) { this.idFuncionario = idFuncionario; }
     public Usuario getUsuario() { return usuario; }
@@ -75,4 +79,6 @@ public class Funcionario {
     public void setDataNascimento(LocalDate dataNascimento) { this.dataNascimento = dataNascimento; }
     public String getEstadoCivil() { return estadoCivil; }
     public void setEstadoCivil(String estadoCivil) { this.estadoCivil = estadoCivil; }
+    public Boolean getAtivo() { return ativo; }
+    public void setAtivo(Boolean ativo) { this.ativo = ativo; }
 }

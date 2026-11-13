@@ -21,7 +21,8 @@ public record FuncionarioResponse(
         String sexo,
         BigDecimal salario,
         LocalDate dataNascimento,
-        String estadoCivil
+        String estadoCivil,
+        Boolean ativo
 ) {
 
     /**
@@ -44,7 +45,8 @@ public record FuncionarioResponse(
                 f.getSexo(),
                 f.getSalario(),
                 f.getDataNascimento(),
-                f.getEstadoCivil()
+                f.getEstadoCivil(),
+                f.getAtivo()
         );
     }
 }
