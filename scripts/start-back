@@ -5,12 +5,24 @@ PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 
 if [ ! -f "$PROJECT_DIR/.env" ]; then
     echo "Erro: arquivo .env não encontrado em $PROJECT_DIR"
+    echo "Copie o .env.exemplo para .env e ajuste usuário e senha do seu MySQL."
     exit 1
 fi
 
-set -a
-source "$PROJECT_DIR/.env"
-set +a
+# Lê o .env linha por linha em vez de usar "source", para que caracteres
+# como & na DB_URL não sejam interpretados pelo shell. Aceita valores com ou
+# sem aspas, ignora linhas vazias e comentários (#) e finais de linha do Windows.
+while IFS= read -r linha || [ -n "$linha" ]; do
+    linha="${linha%$'\r'}"
+    case "$linha" in
+        ''|\#*) continue ;;
+    esac
+    chave="${linha%%=*}"
+    valor="${linha#*=}"
+    valor="${valor%\"}"; valor="${valor#\"}"
+    valor="${valor%\'}"; valor="${valor#\'}"
+    export "$chave=$valor"
+done < "$PROJECT_DIR/.env"
 
 cd "$PROJECT_DIR"
 
