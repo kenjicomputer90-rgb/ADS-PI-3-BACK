@@ -38,6 +38,10 @@ runtime:
         test("dependente vazio vira 0 (regra do service)", function () {
           expect(res.body.dependente).to.equal(0);
         });
+
+        test("todo funcionário novo começa ativo", function () {
+          expect(res.body.ativo).to.equal(true);
+        });
   assertions:
     - expression: res.status
       operator: eq

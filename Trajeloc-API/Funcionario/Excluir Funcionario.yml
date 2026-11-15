@@ -1,7 +1,7 @@
 info:
   name: Excluir Funcionario
   type: http
-  seq: 11
+  seq: 14
 
 http:
   method: DELETE

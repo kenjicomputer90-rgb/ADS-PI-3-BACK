@@ -31,17 +31,21 @@ public class FuncionarioService {
     // ---------- consultas ----------
 
     /**
-     * Lista os funcionários. Se vier um nome, filtra por ele.
+     * Lista os funcionários, com dois filtros opcionais.
      *
-     * @param nome parte do nome para filtrar (opcional)
+     * @param nome  parte do nome para filtrar (opcional)
+     * @param ativo true = só ativos, false = só inativos, null = todos (opcional)
      * @return lista de funcionários no formato de resposta
      */
     @Transactional(readOnly = true)
-    public List<FuncionarioResponse> listar(String nome) {
+    public List<FuncionarioResponse> listar(String nome, Boolean ativo) {
         List<Funcionario> funcionarios = (nome == null || nome.isBlank())
                 ? repository.findAll()
                 : repository.findByNomeContainingIgnoreCaseOrderByNome(nome);
-        return funcionarios.stream().map(FuncionarioResponse::de).toList();
+        return funcionarios.stream()
+                .filter(f -> ativo == null || ativo.equals(f.getAtivo()))
+                .map(FuncionarioResponse::de)
+                .toList();
     }
 
     /**
@@ -127,6 +131,32 @@ public class FuncionarioService {
         repository.delete(obter(id));
     }
 
+    // ---------- ativar e desativar ----------
+
+    /**
+     * Marca o funcionário como ativo (voltou a trabalhar na loja).
+     *
+     * @param id identificador do funcionário
+     * @return o funcionário com ativo = true
+     * @throws RecursoNaoEncontradoException se o id não existir (HTTP 404)
+     */
+    @Transactional
+    public FuncionarioResponse ativar(Integer id) {
+        return mudarSituacao(id, true);
+    }
+
+    /**
+     * Marca o funcionário como inativo (saiu da loja). A ficha e o histórico continuam guardados.
+     *
+     * @param id identificador do funcionário
+     * @return o funcionário com ativo = false
+     * @throws RecursoNaoEncontradoException se o id não existir (HTTP 404)
+     */
+    @Transactional
+    public FuncionarioResponse desativar(Integer id) {
+        return mudarSituacao(id, false);
+    }
+
     // ---------- auxiliares ----------
 
     /** Busca a entidade pelo id ou lança 404. Usado por vários métodos deste service. */
@@ -149,6 +179,13 @@ public class FuncionarioService {
             }
         });
         return usuario;
+    }
+
+    /** Troca a situação (ativo/inativo) do funcionário e salva. Usado pelo ativar e pelo desativar. */
+    private FuncionarioResponse mudarSituacao(Integer id, boolean ativo) {
+        Funcionario funcionario = obter(id);
+        funcionario.setAtivo(ativo);
+        return FuncionarioResponse.de(repository.save(funcionario));
     }
 
     /** Copia os dados do pedido para a entidade. Usado pelo criar e pelo atualizar. */

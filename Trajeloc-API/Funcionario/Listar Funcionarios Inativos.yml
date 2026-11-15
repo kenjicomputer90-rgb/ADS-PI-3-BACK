@@ -1,0 +1,35 @@
+info:
+  name: Listar Funcionarios Inativos
+  type: http
+  seq: 12
+
+http:
+  method: GET
+  url: "{{baseUrl}}/funcionarios?ativo=false"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("todos da lista estão inativos", function () {
+          res.body.forEach(function (f) {
+            expect(f.ativo).to.equal(false);
+          });
+        });
+
+        test("o funcionário desativado aparece na lista", function () {
+          const id = bru.getVar("idFuncionarioTeste");
+          const achou = res.body.some(function (f) { return String(f.idFuncionario) === String(id); });
+          expect(achou).to.equal(true);
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

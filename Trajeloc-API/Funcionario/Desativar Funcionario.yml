@@ -1,0 +1,27 @@
+info:
+  name: Desativar Funcionario
+  type: http
+  seq: 11
+
+http:
+  method: PATCH
+  url: "{{baseUrl}}/funcionarios/{{idFuncionarioTeste}}/desativar"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("o funcionário fica inativo", function () {
+          expect(res.body.ativo).to.equal(false);
+        });
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "200"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

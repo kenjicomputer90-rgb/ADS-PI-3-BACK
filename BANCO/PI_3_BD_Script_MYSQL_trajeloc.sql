@@ -53,6 +53,7 @@ CREATE TABLE funcionario (
     salario DECIMAL(10,2),
     data_nascimento DATETIME,
     estado_civil VARCHAR(30),
+    ativo BOOLEAN NOT NULL DEFAULT TRUE,
     FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
