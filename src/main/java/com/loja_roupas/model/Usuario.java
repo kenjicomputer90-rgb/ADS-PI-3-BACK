@@ -1,5 +1,7 @@
 package com.loja_roupas.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -17,6 +19,8 @@ public class Usuario {
     @Column(name = "email", nullable = false, unique = true, length = 40)
     private String email;
 
+    // A senha é recebida no cadastro, mas nunca volta nas respostas da API
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "senha", nullable = false, length = 60)
     private String senha;
 

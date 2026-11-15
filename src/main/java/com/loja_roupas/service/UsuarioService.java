@@ -52,6 +52,15 @@ public class UsuarioService {
         return usuarioRepository.save(existente);
     }
 
+    // Login do front: confere e-mail e senha. A senha é comparada como está gravada,
+    // porque ainda não há criptografia (RNF-05).
+    public Usuario autenticar(String email, String senha) {
+        return usuarioRepository.findByEmail(email)
+                .filter(u -> u.getSenha() != null && u.getSenha().equals(senha))
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED, "E-mail ou senha inválidos"));
+    }
+
     public void deletar(Integer id) {
         Usuario existente = buscarPorId(id);
         usuarioRepository.delete(existente);

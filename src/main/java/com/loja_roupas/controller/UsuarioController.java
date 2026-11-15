@@ -12,6 +12,8 @@ import java.util.List;
 @RequestMapping("/usuarios")
 public class UsuarioController {
 
+    public record LoginRequest(String email, String senha) {}
+
     private final UsuarioService usuarioService;
 
     public UsuarioController(UsuarioService usuarioService) {
@@ -26,6 +28,11 @@ public class UsuarioController {
     @GetMapping("/{id}")
     public Usuario buscarPorId(@PathVariable Integer id) {
         return usuarioService.buscarPorId(id);
+    }
+
+    @PostMapping("/login")
+    public Usuario login(@RequestBody LoginRequest req) {
+        return usuarioService.autenticar(req.email(), req.senha());
     }
 
     @PostMapping
