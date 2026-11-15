@@ -63,7 +63,8 @@ public class LocacaoService {
 
             if (itemRepository.existeConflito(idPeca, inicio, fim)) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT,
-                        "Peça " + idPeca + " já está locada no período informado");
+                        "A peça " + peca.getCodigoUnico() + " (" + peca.getDescricao()
+                                + ") já está locada no período informado");
             }
 
             ItemLocacao item = new ItemLocacao();

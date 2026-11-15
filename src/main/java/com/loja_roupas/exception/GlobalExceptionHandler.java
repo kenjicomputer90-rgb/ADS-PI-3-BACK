@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,6 +22,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ConflitoException.class)
     public ResponseEntity<Map<String, String>> conflito(ConflitoException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("erro", e.getMessage()));
+    }
+
+    // Erros lançados com ResponseStatusException (ex.: LocacaoService): devolve a mensagem no mesmo formato
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<Map<String, String>> statusComMensagem(ResponseStatusException e) {
+        String mensagem = e.getReason() != null ? e.getReason() : "Erro na requisição";
+        return ResponseEntity.status(e.getStatusCode()).body(Map.of("erro", mensagem));
     }
 
     // CPF duplicado ou id_usuario que não existe na tabela usuario
