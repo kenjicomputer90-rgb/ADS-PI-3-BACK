@@ -1,7 +1,7 @@
 package com.loja_roupas.controller;
 
 import com.loja_roupas.model.Usuario;
-import com.loja_roupas.repository.UsuarioRepository;
+import com.loja_roupas.service.UsuarioService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,56 +12,36 @@ import java.util.List;
 @RequestMapping("/usuarios")
 public class UsuarioController {
 
-    public record UsuarioRequest(String nome, String email, String senha, String perfilAcesso) {}
-    public record UsuarioResponse(Integer idUsuario, String nome, String email, String perfilAcesso) {}
+    private final UsuarioService usuarioService;
 
-    private final UsuarioRepository repo;
-
-    public UsuarioController(UsuarioRepository repo) {
-        this.repo = repo;
-    }
-
-    @PostMapping
-    public ResponseEntity<UsuarioResponse> criar(@RequestBody UsuarioRequest req) {
-        Usuario u = new Usuario();
-        preencher(u, req);
-        return ResponseEntity.status(HttpStatus.CREATED).body(toResponse(repo.save(u)));
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
     }
 
     @GetMapping
-    public List<UsuarioResponse> listar() {
-        return repo.findAll().stream().map(this::toResponse).toList();
+    public List<Usuario> listar() {
+        return usuarioService.listar();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioResponse> buscar(@PathVariable Integer id) {
-        return repo.findById(id).map(u -> ResponseEntity.ok(toResponse(u)))
-                .orElse(ResponseEntity.notFound().build());
+    public Usuario buscarPorId(@PathVariable Integer id) {
+        return usuarioService.buscarPorId(id);
+    }
+
+    @PostMapping
+    public ResponseEntity<Usuario> criar(@RequestBody Usuario usuario) {
+        Usuario criado = usuarioService.criar(usuario);
+        return ResponseEntity.status(HttpStatus.CREATED).body(criado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioResponse> atualizar(@PathVariable Integer id, @RequestBody UsuarioRequest req) {
-        return repo.findById(id).map(u -> {
-            preencher(u, req);
-            return ResponseEntity.ok(toResponse(repo.save(u)));
-        }).orElse(ResponseEntity.notFound().build());
+    public Usuario atualizar(@PathVariable Integer id, @RequestBody Usuario usuario) {
+        return usuarioService.atualizar(id, usuario);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        if (!repo.existsById(id)) return ResponseEntity.notFound().build();
-        repo.deleteById(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    private void preencher(Usuario u, UsuarioRequest r) {
-        u.setNome(r.nome());
-        u.setEmail(r.email());
-        u.setSenha(r.senha());
-        u.setPerfilAcesso(r.perfilAcesso());
-    }
-
-    private UsuarioResponse toResponse(Usuario u) {
-        return new UsuarioResponse(u.getIdUsuario(), u.getNome(), u.getEmail(), u.getPerfilAcesso());
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable Integer id) {
+        usuarioService.deletar(id);
     }
 }
