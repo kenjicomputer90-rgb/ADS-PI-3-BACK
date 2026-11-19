@@ -77,6 +77,15 @@ public long contarProdutos() {
         return service.buscarPorId(id);
     }
 
+    /**
+     * Busca a peça pelo código único da etiqueta (RF-19).
+     * Retorna 404 se não houver peça com esse código.
+     */
+    @GetMapping("/codigo/{codigo}")
+    public ProdutoResponse buscarPorCodigo(@PathVariable String codigo) {
+        return service.buscarPorCodigo(codigo);
+    }
+
     @GetMapping("/codigo/{codigo}/existe")
     public boolean verificarCodigo(@PathVariable String codigo) {
         return service.existePorCodigo(codigo);
